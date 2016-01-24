@@ -28,7 +28,7 @@ function createGrid(rows) {
         var row = rows[i]
         grid[row] = [];
         for (var col = 0; col < rows.length; col++) {
-            grid[row][col] = { name: row + col };
+            grid[row][col] = { name: row + col, firedAt: false };
         }
     }
     return grid;
@@ -49,17 +49,24 @@ function parseInput(coords) {
 }
 // Check hit on grid
 function checkHit(row, col) {
+    debugger;
     var cell = grid[row][col];
     if (cell.firedAt) {
         alert('Invalid Location: Already fired at ' + row + col);
         return;
     } else {
         cell.firedAt = true;
-        cell.ship.hits++;
-        cell.text = "hits";
-        if (cell.ship.isSunk()) {
-            alert("You sank my battleship :(");
+        for (var i = 0; i < ships.length; i++) {
+            for (var j = 0; j < ships[i].onGrid.length; j++) {
+                if (ships[i].onGrid[j][row][col]) {
+                    ships[i].hits++;
+                    if (ships[i].isSunk()) {
+                        alert("You sank my battleship :(");
+                    }
+                }
+            }
         }
+        cell.text = "hits";
     }
 }
 // Check victory condition
