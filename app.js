@@ -106,7 +106,11 @@ function hideShips(grid, shipList) {
         for (var k = 0; k < totalShips; k++) {
             for (var l = 0; l < shipList[k].onGrid.length; l++) {
                 for (var m = 0; m < currentShip.onGrid.length; m++) {
-                    if (currentShip.onGrid[m] === shipList[k].onGrid[l] || currentShip.onGrid[m].col > grid.A.length || currentShip.onGrid[m].row > grid.A.length || currentShip.onGrid[m].col < 0 || currentShip.onGrid[m].row < 0) err = true;
+                    // if (currentShip.onGrid[m] === shipList[k].onGrid[l]) { err = true; console.log(currentShip.onGrid[m] + " matches another ship's coords"); }
+                    if (currentShip.onGrid[m].col > grid.A.length) { err = true; console.log(currentShip.onGrid[m].col + " col exceeds grid length"); }
+                    if (currentShip.onGrid[m].row > grid.A.length) { err = true; console.log(currentShip.onGrid[m].row + " row exceeds grid length"); }
+                    if (currentShip.onGrid[m].col < 0) { err = true; console.log(currentShip.onGrid[m].col + " col not on grid"); }
+                    if (currentShip.onGrid[m].row < 0) { err = true; console.log(currentShip.onGrid[m].row + " row not on grid"); }
                 }
             }
         }
@@ -123,7 +127,7 @@ function hideShips(grid, shipList) {
 //     { name: "patrol", size: 2, onGrid: [], hits: 0 }
 // ];
 
-var ships = createShips(2, 2);
+var ships = createShips(5, 3);
 var rows = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
 var grid = createGrid(rows);
 var test = hideShips(grid, ships);
@@ -132,5 +136,5 @@ for (var n = 0; n < 10; n++) {
     console.log(test);
     if (test) break;
 }
-if (test === false) console.log("Unable to successfully hide ships.");
+if (test === false) console.log("Unable to successfully hide ships."); else console.log("Ships hidden successfully!");
 console.log(ships);
