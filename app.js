@@ -21,7 +21,6 @@ function createShips(totalShips, shipSize) {
     }
     return fleet;
 }
-var ships = createShips(5, 3);
 // grid creator
 function createGrid(rows) {
     var grid = {};
@@ -34,8 +33,6 @@ function createGrid(rows) {
     }
     return grid;
 }
-var rows = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
-var grid = createGrid(rows);
 // Player turn
 function fireMissile() {
     var coords = document.getElementById("user-guess").value;
@@ -74,19 +71,11 @@ function checkVictory() {
     return (shipsSunk >= ships.length);
 }
 
-// TEST HERE
-// var shipyard = [
-//     { name: "carrier", size: 5, onGrid: [], hits: 0 },
-//     { name: "battleship", size: 4, onGrid: [], hits: 0 },
-//     { name: "destroyer", size: 3, onGrid: [], hits: 0 },
-//     { name: "submarine", size: 3, onGrid: [], hits: 0 },
-//     { name: "patrol", size: 2, onGrid: [], hits: 0 }
-// ];
 
 // Function to be tested
 function hideShips(grid, shipList) {
     // init err flag
-    var err;
+    var err = false;
     // find limits
     var gridSize = grid.A.length;
     var totalShips = shipList.length;
@@ -100,25 +89,48 @@ function hideShips(grid, shipList) {
         var direction = myCol % 2;
         // place initial part randomly
         currentShip.onGrid[0] = { row: myRow, col: myCol };
-        // Check if position is already taken
-        // loop through each ship's onGrid looking for the row and col
-        
         // place other parts until done with ship
-        // CURRENTLY DOES NOT CHECK VALID PLACEMENT
         for (var j = 1; j < currentShip.size; j++) {
-            if (orientation===1 && direction===1) {
-                currentShip.onGrid[j] = {row: currentShip.onGrid[0].row-j, col: currentShip.onGrid[0].col};
-            } else if (orientation===1 && direction===0) {
-                currentShip.onGrid[j] = {row: currentShip.onGrid[0].row+j, col: currentShip.onGrid[0].col};
-            } else if (orientation===0 && direction===1) {
-                currentShip.onGrid[j] = {row: currentShip.onGrid[0].row, col: currentShip.onGrid[0].col+j};
-            } else if (orientation===0 && direction===0) {
-                currentShip.onGrid[j] = {row: currentShip.onGrid[0].row, col: currentShip.onGrid[0].col-j};
+            if (orientation === 1 && direction === 1) {
+                currentShip.onGrid[j] = { row: currentShip.onGrid[0].row - j, col: currentShip.onGrid[0].col };
+            } else if (orientation === 1 && direction === 0) {
+                currentShip.onGrid[j] = { row: currentShip.onGrid[0].row + j, col: currentShip.onGrid[0].col };
+            } else if (orientation === 0 && direction === 1) {
+                currentShip.onGrid[j] = { row: currentShip.onGrid[0].row, col: currentShip.onGrid[0].col + j };
+            } else if (orientation === 0 && direction === 0) {
+                currentShip.onGrid[j] = { row: currentShip.onGrid[0].row, col: currentShip.onGrid[0].col - j };
+            }
+        }
+        // VALIDATION
+        // loop through each ship's onGrid looking for the row and col
+        for (var k = 0; k < totalShips; k++) {
+            for (var l = 0; l < shipList[k].onGrid.length; l++) {
+                for (var m = 0; m < currentShip.onGrid.length; m++) {
+                    if (currentShip.onGrid[m] === shipList[k].onGrid[l] || currentShip.onGrid[m].col > grid.A.length || currentShip.onGrid[m].row > grid.A.length || currentShip.onGrid[m].col < 0 || currentShip.onGrid[m].row < 0) err = true;
+                }
             }
         }
     }
     // return
     if (err) return false; else return true;
 }
+// var shipyard = [
+    
+//     { name: "carrier", size: 5, onGrid: [], hits: 0 },
+//     { name: "battleship", size: 4, onGrid: [], hits: 0 },
+//     { name: "destroyer", size: 3, onGrid: [], hits: 0 },
+//     { name: "submarine", size: 3, onGrid: [], hits: 0 },
+//     { name: "patrol", size: 2, onGrid: [], hits: 0 }
+// ];
 
-hideShips(grid, ships);
+var ships = createShips(2, 2);
+var rows = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+var grid = createGrid(rows);
+var test = hideShips(grid, ships);
+for (var n = 0; n < 10; n++) {
+    test = hideShips(grid, ships);
+    console.log(test);
+    if (test) break;
+}
+if (test === false) console.log("Unable to successfully hide ships.");
+console.log(ships);
