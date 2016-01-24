@@ -106,7 +106,8 @@ function hideShips(grid, shipList) {
         for (var k = 0; k < totalShips; k++) {
             for (var l = 0; l < shipList[k].onGrid.length; l++) {
                 for (var m = 0; m < currentShip.onGrid.length; m++) {
-                    // if (currentShip.onGrid[m] === shipList[k].onGrid[l]) { err = true; console.log(currentShip.onGrid[m] + " matches another ship's coords"); }
+                    // Error on this line because it sees itself as a match
+                    if (shipList[i] !== shipList[k]) if (currentShip.onGrid[m].row === shipList[k].onGrid[l].row && currentShip.onGrid[m].col === shipList[k].onGrid[l].col) { err = true; console.log(currentShip.onGrid[m].row + " " + currentShip.onGrid[m].col + " matches another ship's coords at " + shipList[k].onGrid[l].row + " " + shipList[k].onGrid[l].col); }
                     if (currentShip.onGrid[m].col > grid.A.length) { err = true; console.log(currentShip.onGrid[m].col + " col exceeds grid length"); }
                     if (currentShip.onGrid[m].row > grid.A.length) { err = true; console.log(currentShip.onGrid[m].row + " row exceeds grid length"); }
                     if (currentShip.onGrid[m].col < 0) { err = true; console.log(currentShip.onGrid[m].col + " col not on grid"); }
