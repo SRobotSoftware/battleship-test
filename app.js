@@ -5,25 +5,34 @@ function Ship(size) {
     this.hits = 0;
     this.onGrid = new Array();
     this.isSunk = function () {
-        if (this.hits >= this.size) {
-            return true;
-        } else {
-            return false;
-        }
+        if (this.hits >= this.size) return true; else return false;
     }
 }
-// fleet creator
+// fleet creator | Can still be trimmed down, but successfully converted to forEach
 function createShips(totalShips, shipSize) {
-    var fleet = new Array();
-    for (var i = 0; i < totalShips; i++) {
-        var myShip = new Ship(shipSize);
-        fleet.push(myShip);
-    }
-    return fleet;
+    var ships = new Array(totalShips).fill();
+    ships.forEach(function (s) {
+        ships.push(new Ship(shipSize));
+        ships.shift();
+    });
+    return ships;
+    // Old function
+    // var fleet = new Array();
+    // for (var i = 0; i < totalShips; i++) {
+    //     var myShip = new Ship(shipSize);
+    //     fleet.push(myShip);
+    // }
+    // return fleet;
 }
 // grid creator
 function createGrid(rows) {
+    debugger;
     var grid = {};
+    // Attempting to compress with forEach
+    // rows.forEach(function (rowData) {
+    //     grid.push({ row: rowData, firedAt: false })
+    // });
+    // Old Function
     for (var i = 0; i < rows.length; i++) {
         var row = rows[i]
         grid[row] = [];
