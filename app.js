@@ -133,16 +133,35 @@ function hideShips(grid, shipList) {
     // Validate
     return validate(shipList);
 }
+// Draw grid
+function drawGrid(id, grid, ships) {
+    var flag = false;
+    for (var row in grid) {
+        $("#" + id).find('tbody').append($('<tr>'));
+        grid[row].forEach(function (col) {
+            ships.forEach(function (ship) {
+                ship.onGrid.forEach(function (coord) {
+                    var myCoords = col.name.split("");
+                    var myRow = rows.indexOf(myCoords[0]);
+                    if ('' + coord.row + coord.col === '' + myRow + myCoords[1]) { flag = true; }
+                });
+            });
+            (flag) ? $("#" + id).find('tbody').append($('<td>').append($('<p>').text('S').attr('style', 'background-color: green;'))) : $("#" + id).find('tbody').append($('<td>').append($('<p>').text('W').attr('style', 'background-color: blue;')));
+            flag = false;
+        });
+
+    }
+}
 // Testing var for later
-// var shipyard = [
-//     { name: "carrier", size: 5, onGrid: [], hits: 0 },
-//     { name: "battleship", size: 4, onGrid: [], hits: 0 },
-//     { name: "destroyer", size: 3, onGrid: [], hits: 0 },
-//     { name: "submarine", size: 3, onGrid: [], hits: 0 },
-//     { name: "patrol", size: 2, onGrid: [], hits: 0 }
-// ];
+var shipyard = [
+    { name: "carrier", size: 5, onGrid: [], hits: 0 },
+    { name: "battleship", size: 4, onGrid: [], hits: 0 },
+    { name: "destroyer", size: 3, onGrid: [], hits: 0 },
+    { name: "submarine", size: 3, onGrid: [], hits: 0 },
+    { name: "patrol", size: 2, onGrid: [], hits: 0 }
+];
 // Program vars
-var ships = createShips(5, 3);
+var ships = shipyard//createShips(5, 3);
 var rows = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
 var grid = createGrid(rows);
 var test = hideShips(grid, ships);
@@ -156,3 +175,4 @@ do {
     console.log(test);
 } while (attempts < attemptLimit && test);
 (test) ? console.log("Unable to successfully hide ships after " + attempts + " attempts.") : console.log("Ships hidden successfully!");
+drawGrid("my-grid", grid, ships);
