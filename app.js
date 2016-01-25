@@ -5,7 +5,7 @@ function Ship(size) {
     this.hits = 0;
     this.onGrid = new Array();
     this.isSunk = function () {
-        if (this.hits >= this.size) return true; else return false;
+        return (this.hits >= this.size) ? true : false;
     }
 }
 // fleet creator
@@ -69,7 +69,7 @@ function checkHit(row, col) {
             cell.text = "hits";
         });
     }
-    if (success) alert("Hit!"); else alert("Miss!");
+    (success) ? alert("Hit!") : alert("Miss!");
 }
 // Check victory condition
 function checkVictory() {
@@ -77,7 +77,7 @@ function checkVictory() {
     for (var i = 0; i < ships.length; i++) {
         if (ships[i].isSunk()) shipsSunk++;
     }
-    return (shipsSunk >= ships.length);
+    return (shipsSunk >= ships.length) ? true : false;
 }
 // validate ship placement
 function validate(ships) {
@@ -148,11 +148,11 @@ var grid = createGrid(rows);
 var test = hideShips(grid, ships);
 // Game logic
 // Attempt to hide ships x times before giving up
-var x = 20;
-var n = 0;
+var attemptLimit = 20;
+var attempts = 0;
 do {
     test = hideShips(grid, ships);
-    n++;
+    attempts++;
     console.log(test);
-} while (n < x && test);
-if (test) console.log("Unable to successfully hide ships after " + x + " attempts."); else console.log("Ships hidden successfully!");
+} while (attempts < attemptLimit && test);
+(test) ? console.log("Unable to successfully hide ships after " + attempts + " attempts.") : console.log("Ships hidden successfully!");
