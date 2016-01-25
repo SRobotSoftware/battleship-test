@@ -28,3 +28,8 @@ users.forEach(function (u) {
         email: u.email
     })
 });
+
+var myReduce = users.reduce(function(all, item, index) {
+    all.push({name: item.name, email: item.email});
+    return all;
+}, []);
