@@ -16,29 +16,16 @@ function createShips(totalShips, shipSize) {
         ships.shift();
     });
     return ships;
-    // Old function
-    // var fleet = new Array();
-    // for (var i = 0; i < totalShips; i++) {
-    //     var myShip = new Ship(shipSize);
-    //     fleet.push(myShip);
-    // }
-    // return fleet;
 }
 // grid creator
 function createGrid(rows) {
-    var grid = {};
-    // Attempting to compress with forEach
-    // rows.forEach(function (rowData) {
-    //     grid.push({ row: rowData, firedAt: false })
-    // });
-    // Old Function
-    for (var i = 0; i < rows.length; i++) {
-        var row = rows[i]
-        grid[row] = [];
-        for (var col = 0; col < rows.length; col++) {
-            grid[row][col] = { name: row + col, firedAt: false };
-        }
-    }
+    var grid = rows.reduce(function (all, row, index) {
+        all[row] = rows.reduce(function (all, col, index) {
+            all.push({ name: row + index, firedAt: false });
+            return all;
+        }, []);
+        return all;
+    }, {});
     return grid;
 }
 // Player turn
@@ -56,6 +43,7 @@ function parseInput(coords) {
     return newCoords;
 }
 // Check hit on grid
+// Next on the chopping block to be compressed
 function checkHit(row, col) {
     debugger;
     var cell = grid[row][col];
@@ -99,11 +87,11 @@ function validate(ships) {
     // Prep arr for validation
     var validate = shipCoords.sort(function (a, b) { return b - a })
     // check for duplicates
-    validate.reduce(function(all, item, index){
-        var nextIndex = index+1;
+    validate.reduce(function (all, item, index) {
+        var nextIndex = index + 1;
         if (item === validate[nextIndex]) err = true;
         return all;
-    },0);
+    }, 0);
     // constrain to grid
     if (validate[validate.length - 1] < 0) err = true;
     for (var i in validate) {
@@ -111,7 +99,6 @@ function validate(ships) {
     }
     return err;
 }
-
 // Hide ships on grid
 function hideShips(grid, shipList) {
     // init err flag
@@ -147,26 +134,24 @@ function hideShips(grid, shipList) {
     // return
     if (err) return false; else return true;
 }
+// Testing var for later
 // var shipyard = [
-    
 //     { name: "carrier", size: 5, onGrid: [], hits: 0 },
 //     { name: "battleship", size: 4, onGrid: [], hits: 0 },
 //     { name: "destroyer", size: 3, onGrid: [], hits: 0 },
 //     { name: "submarine", size: 3, onGrid: [], hits: 0 },
 //     { name: "patrol", size: 2, onGrid: [], hits: 0 }
 // ];
-
-// Program variables
+// Program vars
 var ships = createShips(5, 3);
 var rows = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
 var grid = createGrid(rows);
 var test = hideShips(grid, ships);
+// Game logic
 // Attempt to hide ships x times before giving up
 var x = 10;
 for (var n = 0; n < x; n++) {
     test = hideShips(grid, ships);
-    console.log(test);
     if (test) break;
 }
 if (test === false) console.log("Unable to successfully hide ships."); else console.log("Ships hidden successfully!");
-console.log(ships);
