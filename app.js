@@ -37,6 +37,7 @@ function fireMissile() {
 }
 // Parse user input
 // Holy crap what a mess, this needs cleaning for proper parsing and sanitization
+// Scrap in favor of regex for validation and proper parsing? ^([a-jA-J])(\d+)$
 function parseInput(coords) {
     var myCoords = coords.split("");
     var newCoords = {};
@@ -113,8 +114,9 @@ function hideShips(grid, shipList) {
     shipList.forEach(function (currentShip) {
         var myRow = Math.floor(Math.random() * gridSize);
         var myCol = Math.floor(Math.random() * gridSize);
-        var orientation = myRow % 2;
-        var direction = myCol % 2;
+        // REWRITE with enums for readibility, and probably just reduce to SOUTH and EAST
+        var orientation = Math.floor(Math.random() * gridSize) % 2;
+        var direction = Math.floor(Math.random() * gridSize) % 2;
         // place initial ship part randomly
         currentShip.onGrid[0] = { row: myRow, col: myCol };
         // place other ship parts until ship is complete
@@ -146,6 +148,7 @@ function drawGrid(id, grid, ships) {
                     if ('' + coord.row + coord.col === '' + myRow + myCoords[1]) { flag = true; }
                 });
             });
+            // Please note that this is simply placeholder to make it functional, will eventually use classes instead of styles
             (flag) ? $("#" + id).find('tbody').append($('<td>').append($('<p>').text('S').attr('style', 'background-color: green;'))) : $("#" + id).find('tbody').append($('<td>').append($('<p>').text('W').attr('style', 'background-color: blue;')));
             flag = false;
         });
